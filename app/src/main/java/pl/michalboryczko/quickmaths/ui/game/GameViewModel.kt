@@ -6,10 +6,8 @@ import android.graphics.Color
 import io.reactivex.observers.DisposableObserver
 import pl.michalboryczko.quickmaths.interactor.TimerUseCase
 import pl.michalboryczko.quickmaths.model.Exercise
-import pl.michalboryczko.quickmaths.model.Question
 import pl.michalboryczko.quickmaths.model.TimerInput
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -25,7 +23,8 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
     val instruction: MutableLiveData<String> = MutableLiveData()
     val instructionColor: MutableLiveData<Int> = MutableLiveData()
     val pointsValue: MutableLiveData<Int> = MutableLiveData()
-
+    val errorMessage: MutableLiveData<String> = MutableLiveData()
+    private lateinit var exerciseProvider: ExerciseProvider
 
 
     init {
@@ -34,22 +33,30 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
         pointsValue.value = 0
     }
 
+    fun initViewModel(level: Int){
+        this.exerciseProvider = ExerciseProvider(level)
+    }
+
     fun nextClicked(){
         getNextEquation()
     }
 
-    fun okClicked(userInput: Long){
+    fun okClicked(userInput: Int){
         checkUserAnswer(userInput)
         getNextEquation()
     }
 
+    fun provideError(msg: String?){
+        if(msg != null){
+            errorMessage.value = msg
+        }
 
-    private fun checkUserAnswer(userInput: Long){
+    }
+
+    private fun checkUserAnswer(userInput: Int){
         val isUserCorrect = userInput == currentExercise.result
         if(isUserCorrect) pointsValue.value = pointsValue.value!! + 1
         instructionColor.value = if(isUserCorrect) Color.GREEN else Color.RED
-
-
 
         timerUseCase.execute(object: DisposableObserver<Long>(){
             override fun onComplete() {
@@ -61,19 +68,14 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
             }
 
             override fun onError(e: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                provideError(e.message)
             }
         }, TimerInput(0, 0, 2, 1, TimeUnit.SECONDS))
     }
 
 
     fun getNextEquation(){
-        val r = Random()
-        val first = r.nextInt(100)
-        val second = r.nextInt(100)
-        val equation = "$first + $second = ?"
-        val result = first.toLong() + second.toLong()
-        currentExercise = Exercise(equation, result)
+        currentExercise = exerciseProvider.getEquation()
         instruction.value = currentExercise.equation
     }
 
@@ -90,7 +92,7 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
             }
 
             override fun onError(e: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                provideError(e.message)
             }
         }, TimerInput(0, 3, 0, 1, TimeUnit.SECONDS))
 
@@ -110,7 +112,7 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
             }
 
             override fun onError(e: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                provideError(e.message)
             }
         }, TimerInput(0, 0, 30, 1, TimeUnit.SECONDS))
     }

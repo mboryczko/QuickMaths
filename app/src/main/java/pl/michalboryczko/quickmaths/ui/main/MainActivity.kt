@@ -18,14 +18,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.currentQuestion.observe(this, Observer{
-            label.text = it?.question
-        })
-
-        questionCard.setOnClickListener {
-            val i = Intent(this, GameActivity::class.java)
-            startActivity(i)
-        }
+        levelOneButtonutton.setOnClickListener { navigator.navigateToGameActivity(this, 1) }
+        levelTwoButton.setOnClickListener { navigator.navigateToGameActivity(this, 2) }
+        levelThreeButton.setOnClickListener { navigator.navigateToGameActivity(this, 3) }
     }
 
     override fun initViewModel(){

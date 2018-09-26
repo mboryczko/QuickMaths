@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.splash.SplashActivity" />
-        <activity android:name=".ui.game.GameActivity"></activity>
+        <activity android:name=".ui.game.GameActivity" />
+        <activity android:name=".ui.dart.DartActivity"></activity>
     </application>
 
 </manifest>

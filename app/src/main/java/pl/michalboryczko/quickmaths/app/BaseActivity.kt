@@ -15,6 +15,10 @@ open abstract class BaseActivity : DaggerAppCompatActivity() {
 
     @Inject lateinit var  viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var navigator: Navigator
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()

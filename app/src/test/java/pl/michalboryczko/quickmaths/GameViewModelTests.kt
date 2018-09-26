@@ -40,8 +40,6 @@ class GameViewModelTests {
 
     @Test
     fun testCounter(){
-        //so that time has passed and som value is prepared
-        //scheduler.advanceTimeBy(10, TimeUnit.SECONDS)
         viewmodel.getNextEquation()
         viewmodel.startTimer()
         viewmodel.okClicked(viewmodel.currentExercise.result)
