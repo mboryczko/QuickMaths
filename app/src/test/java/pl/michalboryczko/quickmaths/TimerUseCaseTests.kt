@@ -30,7 +30,7 @@ class TimerUseCaseTests {
         }
 
         val xd = timerUseCase
-                .observable(input)
+                .buildObservable(input)
                 .test()
 
         scheduler.advanceTimeBy(500, TimeUnit.MILLISECONDS)
@@ -43,7 +43,7 @@ class TimerUseCaseTests {
         val expectedOutput = arrayOf<Long>(5, 4, 3, 2, 1, 0)
 
         val xd = timerUseCase
-                .observable(input)
+                .buildObservable(input)
                 .test()
 
         scheduler.advanceTimeBy(5, TimeUnit.SECONDS)
@@ -56,7 +56,7 @@ class TimerUseCaseTests {
         val expectedOutput = arrayOf<Long>(0, 1, 2, 3, 4, 5, 6)
 
         val xd = timerUseCase
-                .observable(input)
+                .buildObservable(input)
                 .test()
 
         scheduler.advanceTimeBy(6, TimeUnit.SECONDS)

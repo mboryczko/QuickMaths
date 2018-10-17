@@ -9,14 +9,12 @@ import kotlinx.android.synthetic.main.activity_dart.*
 import pl.michalboryczko.quickmaths.R
 import pl.michalboryczko.quickmaths.app.BaseActivity
 
-class DartActivity : BaseActivity() {
+class DartActivity : BaseActivity<DartViewModel>() {
 
-    lateinit var viewModel : DartViewModel
 
     companion object {
         fun prepareIntent(activity: Activity) = Intent()
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +23,4 @@ class DartActivity : BaseActivity() {
         dartboardImageView.setOnClickListener{ viewModel.dartClicked() }
     }
 
-    override fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DartViewModel::class.java)
-    }
 }

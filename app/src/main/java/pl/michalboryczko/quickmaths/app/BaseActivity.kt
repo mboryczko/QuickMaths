@@ -1,19 +1,20 @@
 package pl.michalboryczko.quickmaths.app
 
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.PersistableBundle
 import dagger.android.support.DaggerAppCompatActivity
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
+import kotlin.reflect.KClass
 
 /**
  * Created by ${michal_boryczko} on 12.06.2018.
  */
-open abstract class BaseActivity : DaggerAppCompatActivity() {
+
+open abstract class BaseActivity<T: BaseViewModel> : DaggerAppCompatActivity() {
 
     @Inject lateinit var  viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModel : T
 
     @Inject
     lateinit var navigator: Navigator
@@ -24,18 +25,11 @@ open abstract class BaseActivity : DaggerAppCompatActivity() {
         initViewModel()
     }
 
-    abstract fun initViewModel()
-
-    private val disposables :MutableList<Disposable> = mutableListOf()
-
-    fun Disposable.addDisposable(){
-        disposables.add(this)
+    private fun initViewModel(){
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get( viewModel.javaClass)
     }
+/*
+    abstract fun initViewModel()*/
 
-    override fun onStop() {
-        super.onStop()
-        for(disposable in disposables)
-            if(!disposable.isDisposed)
-                disposable.dispose()
-    }
+
 }

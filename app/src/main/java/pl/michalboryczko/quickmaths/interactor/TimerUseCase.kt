@@ -2,13 +2,15 @@ package pl.michalboryczko.quickmaths.interactor
 
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import pl.michalboryczko.quickmaths.base.BaseObservable
 import pl.michalboryczko.quickmaths.base.ObservableUseCase
 import pl.michalboryczko.quickmaths.model.TimerInput
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class TimerUseCase @Inject constructor(private val subscribeScheduler: Scheduler,
-                                       private val observeOnScheduler: Scheduler ): ObservableUseCase<TimerInput, Long>(subscribeScheduler, observeOnScheduler) {
+                                       private val observeOnScheduler: Scheduler): BaseObservable<TimerInput, Long>(subscribeScheduler, observeOnScheduler) {
+
 
 
     override fun buildUseCaseObservable(p: TimerInput): Observable<Long> {
