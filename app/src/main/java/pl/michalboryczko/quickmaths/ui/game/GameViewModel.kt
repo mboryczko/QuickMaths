@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.graphics.Color
 import io.reactivex.observers.DisposableObserver
+import pl.michalboryczko.quickmaths.app.BaseViewModel
 import pl.michalboryczko.quickmaths.interactor.TimerUseCase
 import pl.michalboryczko.quickmaths.model.Exercise
 import pl.michalboryczko.quickmaths.model.TimerInput
@@ -14,7 +15,7 @@ import javax.inject.Inject
 /**
  * Created by ${michal_boryczko} on 11.06.2018.
  */
-class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) :ViewModel() {
+class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) :BaseViewModel() {
 
     lateinit var currentExercise: Exercise
 

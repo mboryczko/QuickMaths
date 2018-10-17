@@ -9,15 +9,16 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_game.*
 import pl.michalboryczko.quickmaths.R
 import pl.michalboryczko.quickmaths.app.BaseActivity
+import pl.michalboryczko.quickmaths.app.BaseActivity2
+import pl.michalboryczko.quickmaths.app.BaseViewModel
 import pl.michalboryczko.quickmaths.utils.Constants
 
-class GameActivity : BaseActivity() {
-
-    lateinit var viewModel : GameViewModel
+class GameActivity : BaseActivity2<GameViewModel>() {
 
     companion object {
-        fun prepareIntent(activity: Activity, level: Int) = Intent()
+        fun prepareIntent(activity: Activity, level: Int) = Intent(activity, GameActivity::class.java)
                 .putExtra(Constants.GAME_LEVEL, level)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
