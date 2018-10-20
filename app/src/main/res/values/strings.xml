@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">FiveSecond</string>
+    <string name="app_name">Quick Maths</string>
+
+    <!--register-->
+    <string name="email_hint">E-mail</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="register_button">Register</string>
+
+
 </resources>

@@ -59,19 +59,14 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
         if(isUserCorrect) pointsValue.value = pointsValue.value!! + 1
         instructionColor.value = if(isUserCorrect) Color.GREEN else Color.RED
 
-        timerUseCase.execute(object: DisposableObserver<Long>(){
-            override fun onComplete() {
-                instructionColor.value = Color.BLACK
-            }
 
-            override fun onNext(t: Long) {
-                instructionColor.value = if(isUserCorrect) Color.GREEN else Color.RED
-            }
-
-            override fun onError(e: Throwable) {
-                provideError(e.message)
-            }
-        }, TimerInput(0, 0, 2, 1, TimeUnit.SECONDS))
+        timerUseCase
+                .observable(TimerInput(0, 0, 2, 1, TimeUnit.SECONDS))
+                .subscribe(
+                        {instructionColor.value = if(isUserCorrect) Color.GREEN else Color.RED},
+                        {e -> provideError(e.message)},
+                        {instructionColor.value = Color.BLACK}
+                )
     }
 
 
@@ -81,41 +76,35 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
     }
 
     fun startTimer(){
-        timerUseCase.execute(object: DisposableObserver<Long>(){
-            override fun onComplete() {
-                startGameTimer()
-            }
-
-            override fun onNext(t: Long) {
-                timerInfo.value = "Test starts in: "
-                timerValue.value = t.toString()
-                Timber.d("received: $t")
-            }
-
-            override fun onError(e: Throwable) {
-                provideError(e.message)
-            }
-        }, TimerInput(0, 3, 0, 1, TimeUnit.SECONDS))
-
+        timerUseCase
+                .observable(TimerInput(0, 3, 0, 1, TimeUnit.SECONDS))
+                .subscribe(
+                        {t ->
+                            timerInfo.value = "Test starts in: "
+                            timerValue.value = t.toString()
+                            Timber.d("received: $t")
+                            },
+                        {e ->  provideError(e.message)},
+                        { startGameTimer() }
+                )
     }
 
     private fun startGameTimer(){
         getNextEquation()
-        timerUseCase.execute(object: DisposableObserver<Long>(){
-            override fun onComplete() {
-                timerInfo.value = "End of time"
-                timerValue.value = ""
-            }
 
-            override fun onNext(t: Long) {
-                timerInfo.value = "Time left "
-                timerValue.value = t.toString()
-            }
-
-            override fun onError(e: Throwable) {
-                provideError(e.message)
-            }
-        }, TimerInput(0, 0, 30, 1, TimeUnit.SECONDS))
+        timerUseCase
+                .observable( TimerInput(0, 0, 30, 1, TimeUnit.SECONDS))
+                .subscribe(
+                        {t ->
+                            timerInfo.value = "Time left "
+                            timerValue.value = t.toString()
+                        },
+                        {e ->  provideError(e.message)},
+                        {
+                            timerInfo.value = "End of time"
+                            timerValue.value = ""
+                        }
+                )
     }
 
 

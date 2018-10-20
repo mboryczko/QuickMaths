@@ -3,9 +3,10 @@ package pl.michalboryczko.quickmaths.di
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import pl.michalboryczko.quickmaths.source.api.ApiModule
+import pl.michalboryczko.quickmaths.di.modules.ApiModule
 import pl.michalboryczko.quickmaths.app.MainApplication
-import pl.michalboryczko.quickmaths.source.database.DatabaseModule
+import pl.michalboryczko.quickmaths.di.modules.DatabaseModule
+import pl.michalboryczko.quickmaths.di.modules.InteractorModule
 import pl.michalboryczko.quickmaths.di.modules.MainModule
 import javax.inject.Singleton
 
@@ -20,7 +21,8 @@ import javax.inject.Singleton
                 ApiModule::class,
                 DatabaseModule::class,
                 ViewModelBuilder::class,
-                MainModule::class
+                MainModule::class,
+                InteractorModule::class
         ))
 interface AppComponent : AndroidInjector<MainApplication> {
 

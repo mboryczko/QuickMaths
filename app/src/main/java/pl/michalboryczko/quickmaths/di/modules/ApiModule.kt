@@ -1,4 +1,4 @@
-package pl.michalboryczko.quickmaths.source.api
+package pl.michalboryczko.quickmaths.di.modules
 
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -10,6 +10,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pl.michalboryczko.quickmaths.source.api.Api
+import pl.michalboryczko.quickmaths.source.api.ApiService
+import pl.michalboryczko.quickmaths.source.api.FirebaseApiService
 import java.util.concurrent.TimeUnit
 
 
@@ -24,6 +27,11 @@ class ApiModule {
     @Provides
     fun provideGsonConverter(): Converter.Factory {
         return GsonConverterFactory.create()
+    }
+
+    @Provides
+    fun provideFirebaseApiService(): FirebaseApiService {
+        return FirebaseApiService()
     }
 
     @Provides

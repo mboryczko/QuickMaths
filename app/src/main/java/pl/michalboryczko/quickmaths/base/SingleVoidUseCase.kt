@@ -10,8 +10,6 @@ import io.reactivex.observers.DisposableSingleObserver
  */
 abstract class SingleVoidUseCase<R> protected constructor() : SingleUseCase<Unit, R>() {
 
-    fun execute(observer: DisposableSingleObserver<R>) = super.execute(observer, Unit)
-
     override fun buildUseCaseSingle(unit: Unit): Single<R> = buildUseCaseSingle()
 
     protected abstract fun buildUseCaseSingle(): Single<R>

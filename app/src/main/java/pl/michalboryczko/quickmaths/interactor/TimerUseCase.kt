@@ -11,6 +11,8 @@ class TimerUseCase @Inject constructor(private val subscribeScheduler: Scheduler
                                        private val observeOnScheduler: Scheduler ): ObservableUseCase<TimerInput, Long>(subscribeScheduler, observeOnScheduler) {
 
 
+
+
     override fun buildUseCaseObservable(p: TimerInput): Observable<Long> {
         if(p.startTime <= p.endTime){
             //going up

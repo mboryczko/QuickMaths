@@ -13,8 +13,6 @@ abstract class ObservableVoidUseCase<R> protected constructor(
         private val observeOnScheduler: Scheduler
 ) : ObservableUseCase<Unit, R>(subscribeScheduler, observeOnScheduler) {
 
-    fun execute(observer: DisposableObserver<R>) = super.execute(observer, Unit)
-
     override fun buildUseCaseObservable(item: Unit): Observable<R> = buildUseCaseObservable()
 
     protected abstract fun buildUseCaseObservable(): Observable<R>

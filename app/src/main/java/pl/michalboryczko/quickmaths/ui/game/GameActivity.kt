@@ -2,18 +2,15 @@ package pl.michalboryczko.quickmaths.ui.game
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_game.*
 import pl.michalboryczko.quickmaths.R
 import pl.michalboryczko.quickmaths.app.BaseActivity
-import pl.michalboryczko.quickmaths.app.BaseActivity2
-import pl.michalboryczko.quickmaths.app.BaseViewModel
 import pl.michalboryczko.quickmaths.utils.Constants
 
-class GameActivity : BaseActivity2<GameViewModel>() {
+class GameActivity : BaseActivity<GameViewModel>() {
 
     companion object {
         fun prepareIntent(activity: Activity, level: Int) = Intent(activity, GameActivity::class.java)
@@ -46,11 +43,9 @@ class GameActivity : BaseActivity2<GameViewModel>() {
         }
         nextButton.setOnClickListener { viewModel.nextClicked() }
 
-
-
     }
 
     override fun initViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(GameViewModel::class.java)
+        viewModel = getGenericViewModel()
     }
 }

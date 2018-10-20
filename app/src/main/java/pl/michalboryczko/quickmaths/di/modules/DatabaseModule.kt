@@ -1,8 +1,9 @@
-package pl.michalboryczko.quickmaths.source.database
+package pl.michalboryczko.quickmaths.di.modules
 
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import pl.michalboryczko.quickmaths.source.database.AppDatabase
 import pl.michalboryczko.quickmaths.source.database.dao.QuestionDAO
 
 /**
@@ -12,7 +13,7 @@ import pl.michalboryczko.quickmaths.source.database.dao.QuestionDAO
 class DatabaseModule {
 
     @Provides
-    fun provideDatbase(context: Context): AppDatabase{
+    fun provideDatbase(context: Context): AppDatabase {
         return AppDatabase.getAppDatabase(context)
     }
 

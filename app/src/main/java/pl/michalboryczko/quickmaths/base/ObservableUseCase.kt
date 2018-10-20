@@ -25,8 +25,6 @@ abstract class ObservableUseCase<in T, R> protected constructor(
         private val observeOnScheduler: Scheduler
 ) {
 
-    private val disposables: CompositeDisposable = CompositeDisposable()
-
     /**
      * Builds an [Observable] which will be used when executing the current [ObservableUseCase].
      */
@@ -35,47 +33,9 @@ abstract class ObservableUseCase<in T, R> protected constructor(
     /**
      * Returns built [Observable]. This method is for composing and reusing existed UseCases
      */
-    internal fun observable(params: T): Observable<R> = buildUseCaseObservable(params)
+    internal fun observable(params: T): Observable<R>
+            = buildUseCaseObservable(params)
+            .subscribeOn(subscribeScheduler)
+            .observeOn(observeOnScheduler)
 
-    /**
-     * Executes the current use case.
-     * @param observer [DisposableObserver] which will be listening to the observable build
-     * * by [.buildUseCaseObservable] ()} method.
-     * @param params Parameters (Optional) used to build/execute this use case.
-     */
-    open fun execute(observer: DisposableObserver<R>, params: T) {
-        val observable = this.buildUseCaseObservable(params)
-                .subscribeOn(subscribeScheduler)
-                .observeOn(observeOnScheduler)
-        addDisposable(observable.subscribeWith(observer))
-    }
-
-    /**
-     * Dispose from current [CompositeDisposable].
-     */
-    open fun dispose() {
-        if (!disposables.isDisposed) {
-            disposables.dispose()
-        }
-    }
-
-    open fun checkStatus() =
-            "UseCase is disposed: ${disposables.isDisposed}, size: ${disposables.size()}"
-
-
-    /**
-     * Clears all disposables
-     */
-    open fun clear() {
-        if (!disposables.isDisposed) {
-            disposables.clear()
-        }
-    }
-
-    /**
-     * Dispose from current [CompositeDisposable].
-     */
-    private fun addDisposable(disposable: Disposable) {
-        disposables.add(disposable)
-    }
 }
