@@ -9,6 +9,7 @@ import pl.michalboryczko.quickmaths.interactor.TimerUseCase
 import pl.michalboryczko.quickmaths.model.TimerInput
 import java.util.concurrent.TimeUnit
 import io.reactivex.schedulers.TestScheduler
+import org.junit.Before
 import pl.michalboryczko.quickmaths.model.Exercise
 import pl.michalboryczko.quickmaths.ui.game.GameViewModel
 
@@ -20,23 +21,19 @@ import org.mockito.Mockito.`when`
 import org.mockito.stubbing.OngoingStubbing
 
 
-class GameViewModelTests {
-
-    @Rule
-    @JvmField
-    val rule = InstantTaskExecutorRule()
-
-    inline fun <reified T> mock() = Mockito.mock(T::class.java)
-    inline fun <T> whenever(methodCall: T) : OngoingStubbing<T> =
-            Mockito.`when`(methodCall)
+class GameViewModelTests: BaseTest() {
 
     val scheduler = TestScheduler()
     val timerUseCase by lazy { TimerUseCase(scheduler, scheduler) }
 
-    //val observerState = Observer<Int>{ System.out.print(21) }
     val observerState = mock<Observer<Int>>()
     val viewmodel by lazy { GameViewModel(timerUseCase) }
 
+
+    @Before
+    fun setUp(){
+        viewmodel.initViewModel(1)
+    }
 
     @Test
     fun testCounter(){

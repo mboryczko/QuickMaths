@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pl.michalboryczko.quickmaths.interactor.InternetConnectivityChecker
 import pl.michalboryczko.quickmaths.source.api.Api
 import pl.michalboryczko.quickmaths.source.api.ApiService
 import pl.michalboryczko.quickmaths.source.api.FirebaseApiService
@@ -28,6 +29,12 @@ class ApiModule {
     fun provideGsonConverter(): Converter.Factory {
         return GsonConverterFactory.create()
     }
+
+    @Provides
+    fun provideInternetConnectivityChecker(context: Context): InternetConnectivityChecker {
+        return InternetConnectivityChecker(context)
+    }
+
 
     @Provides
     fun provideFirebaseApiService(): FirebaseApiService {

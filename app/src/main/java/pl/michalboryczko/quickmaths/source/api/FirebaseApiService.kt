@@ -1,16 +1,21 @@
 package pl.michalboryczko.quickmaths.source.api
 
-import android.app.Activity
-import android.content.Context
 import android.util.Log
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.*
+import pl.michalboryczko.quickmaths.interactor.InternetConnectivityChecker
+import pl.michalboryczko.quickmaths.model.Exercise
 import pl.michalboryczko.quickmaths.model.User
 import javax.inject.Inject
 import javax.inject.Singleton
 import pl.michalboryczko.quickmaths.model.LoginInput
+import pl.michalboryczko.quickmaths.model.exceptions.ApiErrorException
+import pl.michalboryczko.quickmaths.model.exceptions.ApiErrorMessageException
+import pl.michalboryczko.quickmaths.model.exceptions.NoInternetAccessException
+import pl.michalboryczko.quickmaths.model.exceptions.UnauthorizedException
 import pl.michalboryczko.quickmaths.source.repository.UserRepository
+import retrofit2.Response
+import java.lang.Exception
 
 
 /**
@@ -34,14 +39,20 @@ class FirebaseApiService
     }
 
     override fun createUser(user: User): Single<Boolean> {
-        return Single.create { emitter ->
+        return Single
+                .create { emitter ->
                 auth.createUserWithEmailAndPassword(user.email, user.password)
-                        .addOnSuccessListener{ emitter.onSuccess(true) }
+                        .addOnSuccessListener{
+
+                            Log.d("apiLog", "onsuccess ")
+                            emitter.onSuccess(true)
+
+                        }
                         .addOnFailureListener{
-                            emitter.onSuccess(false)
-                            Log.d("firebaseLog", "message: ${it.localizedMessage}")
-                            Log.d("firebaseLog", "tostring: ${it.toString()}")
+                            Log.d("apiLog", "onfailure listener message: ${it.localizedMessage}")
+                            emitter.onError(Exception("no internet"))
                         }
             }
     }
+
 }

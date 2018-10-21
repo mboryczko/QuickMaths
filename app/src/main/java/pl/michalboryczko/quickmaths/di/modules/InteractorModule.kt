@@ -3,6 +3,7 @@ package pl.michalboryczko.quickmaths.di.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import pl.michalboryczko.quickmaths.interactor.InternetConnectivityChecker
 import pl.michalboryczko.quickmaths.source.api.FirebaseApiService
 import pl.michalboryczko.quickmaths.source.database.AppDatabase
 import pl.michalboryczko.quickmaths.source.database.dao.QuestionDAO
@@ -16,8 +17,8 @@ import pl.michalboryczko.quickmaths.source.repository.UserRepositoryImpl
 class InteractorModule {
 
     @Provides
-    fun provideUserRepository(firebaseApiService: FirebaseApiService): UserRepository{
-        return UserRepositoryImpl(firebaseApiService)
+    fun provideUserRepository(firebaseApiService: FirebaseApiService, checker: InternetConnectivityChecker): UserRepository{
+        return UserRepositoryImpl(firebaseApiService, checker)
     }
 
 }

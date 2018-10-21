@@ -7,5 +7,10 @@
     <string name="password_hint">Password</string>
     <string name="register_button">Register</string>
 
+    <string name="invalid_email">Invalid e-mail address</string>
+    <string name="invalid_username_too_short">Username should have at least 3 characters</string>
+    <string name="invalid_password_too_short">Password should have at least 3 characters</string>
+    <string name="invalid_password_no_number">Password should have at 1 number</string>
+
 
 </resources>

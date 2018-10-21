@@ -60,13 +60,15 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
         instructionColor.value = if(isUserCorrect) Color.GREEN else Color.RED
 
 
-        timerUseCase
+        val call = timerUseCase
                 .observable(TimerInput(0, 0, 2, 1, TimeUnit.SECONDS))
                 .subscribe(
                         {instructionColor.value = if(isUserCorrect) Color.GREEN else Color.RED},
                         {e -> provideError(e.message)},
                         {instructionColor.value = Color.BLACK}
                 )
+
+        disposables.add(call)
     }
 
 
