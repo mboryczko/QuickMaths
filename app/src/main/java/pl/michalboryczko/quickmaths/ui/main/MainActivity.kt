@@ -1,15 +1,11 @@
 package pl.michalboryczko.quickmaths.ui.main
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.michalboryczko.quickmaths.R
 import pl.michalboryczko.quickmaths.app.BaseActivity
-import pl.michalboryczko.quickmaths.ui.game.GameActivity
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
@@ -25,7 +21,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         levelTwoButton.setOnClickListener { navigator.navigateToGameActivity(this, 2) }
         levelThreeButton.setOnClickListener { navigator.navigateToGameActivity(this, 3) }
 
-        dartButton.setOnClickListener { navigator.navigateToRegisterActivity(this)}
+        registerButton.setOnClickListener { navigator.navigateToRegisterActivity(this)}
 
 
     }

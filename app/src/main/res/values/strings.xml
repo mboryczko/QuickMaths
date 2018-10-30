@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Quick Maths</string>
 
+    <!--menu-->
+    <string name="login_button">Login</string>
+
     <!--register-->
     <string name="email_hint">E-mail</string>
     <string name="username_hint">Username</string>

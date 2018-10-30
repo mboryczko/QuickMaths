@@ -21,6 +21,11 @@ class RegisterActivity : BaseActivity<RegisterViewModel>() {
         setContentView(R.layout.activity_register)
 
         viewModel.internetConnection.observe(this, Observer{ internetTextView.visibility = if(it!!) View.GONE else View.VISIBLE})
+        viewModel.internetConnection.observe(this, Observer{
+            it?.let {
+                internetTextView.visibility = if(it) View.GONE else View.VISIBLE
+            }
+        })
 
 
         registerButton.setOnClickListener { viewModel.registerClicked(

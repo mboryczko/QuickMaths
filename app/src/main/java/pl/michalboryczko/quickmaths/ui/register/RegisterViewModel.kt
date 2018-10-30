@@ -41,7 +41,6 @@ class RegisterViewModel
                             Log.d("apiLog", "subscribed success")
                             toastInfo.value = "Account created" },
                         {
-
                             if(it is NoInternetAccessException){
                                 Log.d("apiLog", "subscribed error no internett")
                                 toastInfo.value = "no internet connection baby"
