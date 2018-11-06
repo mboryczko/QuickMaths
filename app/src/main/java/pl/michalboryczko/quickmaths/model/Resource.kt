@@ -16,7 +16,7 @@ enum class Status {
  * A generic class that holds a value with its loading status.
  * @param <T>
 </T> */
-data class Resource<T>(var status: Status, var data: T? = null, var message: String? = null) {
+data class Resource<T>(var status: Status, var data: T? = null, var message: Int? = null) {
 
     companion object {
         /**
@@ -33,11 +33,11 @@ data class Resource<T>(var status: Status, var data: T? = null, var message: Str
         /**
          * Creates [Resource] object with `ERROR` status and [message].
          */
-        fun <T> error(message: String?): Resource<T> = Resource(Status.ERROR, message = message)
+        fun <T> error(message: Int?): Resource<T> = Resource(Status.ERROR, message = message)
     }
 }
 
-data class EmptyResource(var status: Status, var message: String? = null) {
+data class EmptyResource(var status: Status, var message: Int? = null) {
 
     companion object {
         /**
@@ -54,6 +54,6 @@ data class EmptyResource(var status: Status, var message: String? = null) {
         /**
          * Creates [Resource] object with `ERROR` status and [message].
          */
-        fun error(message: String?) = EmptyResource(Status.ERROR, message = message)
+        fun error(message: Int?) = EmptyResource(Status.ERROR, message = message)
     }
 }

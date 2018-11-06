@@ -35,7 +35,10 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
                     }
 
                     Status.ERROR -> {
-						showToastMessage(it.message!!)
+                        it.message?.let {
+                            val message = resources.getString(it)
+                            showToastMessage(message)
+                        }
                     }
 
                 }

@@ -1,7 +1,6 @@
 package pl.michalboryczko.quickmaths
 
 import android.arch.lifecycle.Observer
-import android.content.Context
 import io.reactivex.Observable
 import org.junit.Assert.*
 import org.junit.Test
@@ -9,7 +8,6 @@ import org.junit.Test
 import org.junit.Before
 
 import org.mockito.Mockito.*
-import org.mockito.verification.VerificationMode
 import pl.michalboryczko.quickmaths.interactor.InternetConnectivityChecker
 import pl.michalboryczko.quickmaths.model.User
 import pl.michalboryczko.quickmaths.model.register.RegisterError
@@ -21,12 +19,11 @@ import pl.michalboryczko.quickmaths.ui.register.RegisterViewModel
 
 class RegisterViewModelTests: BaseTest() {
 
-    val observerBooleanState = mock<Observer<Boolean>>()
-    val observerErrorState = mock<Observer<RegisterError>>()
-    val checker = mock(InternetConnectivityChecker::class.java)
-    val repo = mock(UserRepository::class.java)
-
-    val viewmodel by lazy { RegisterViewModel(repo, checker) }
+    private val observerBooleanState = mock<Observer<Boolean>>()
+    private val observerErrorState = mock<Observer<RegisterError>>()
+    private val checker = mock(InternetConnectivityChecker::class.java)
+    private val repo = mock(UserRepository::class.java)
+    private val viewmodel by lazy { RegisterViewModel(repo, checker) }
 
 
     @Before
@@ -52,10 +49,11 @@ class RegisterViewModelTests: BaseTest() {
 
     @Test
     fun registerValidationsTest(){
-        viewmodel.validateUser(generateValidUser())
-        assertNull( (viewmodel.errorInformation.value as RegisterError).emailError)
+
+        assertTrue(viewmodel.validateUser(generateValidUser()))
+        /*assertNull( (viewmodel.errorInformation.value as RegisterError).emailError)
         assertNull( (viewmodel.errorInformation.value as RegisterError).passwordError)
-        assertNull( (viewmodel.errorInformation.value as RegisterError).usernameError)
+        assertNull( (viewmodel.errorInformation.value as RegisterError).usernameError)*/
     }
 
     @Test

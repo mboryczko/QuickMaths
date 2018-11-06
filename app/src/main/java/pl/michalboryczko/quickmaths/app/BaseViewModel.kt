@@ -19,6 +19,7 @@ open abstract class BaseViewModel: ViewModel() {
 
 
     val toastInfo: MutableLiveData<String> = MutableLiveData()
+    val toastInfoResource: MutableLiveData<Int> = MutableLiveData()
     protected val disposables :MutableList<Disposable> = mutableListOf()
 
 

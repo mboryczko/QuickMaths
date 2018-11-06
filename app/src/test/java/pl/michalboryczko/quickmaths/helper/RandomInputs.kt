@@ -21,7 +21,9 @@ class RandomInputs {
     val letters = "abcdefghijklmnopqrstuvwxyz".toCharArray()
 
     fun generateRandomEmail(): String{
-        return "${generateRandomString()}@${generateRandomString()}.com"
+        val before = generateRandomString()
+        val after = generateRandomString()
+        return "${before}@${after}.com"
     }
 
     fun generateStrongPassword(): String = "5" + ('a' .. 'z').randomString(5) + (0 .. 9).randomStringFromNumbers(2) + "6"

@@ -53,7 +53,7 @@ class UserRepositoryImpl
         }
     }
 
-    internal fun <T> handleExceptions(): SingleTransformer<T, T> = SingleTransformer {
+    private fun <T> handleExceptions(): SingleTransformer<T, T> = SingleTransformer {
         it.onErrorResumeNext { throwable ->
             Single.error(when (throwable) {
                 is UnknownException -> UnknownException("unexpected error")
