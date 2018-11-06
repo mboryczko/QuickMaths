@@ -11,6 +11,8 @@ import pl.michalboryczko.quickmaths.di.ViewModelKey
 import pl.michalboryczko.quickmaths.interactor.TimerUseCase
 import pl.michalboryczko.quickmaths.ui.game.GameActivity
 import pl.michalboryczko.quickmaths.ui.game.GameViewModel
+import pl.michalboryczko.quickmaths.ui.login.LoginActivity
+import pl.michalboryczko.quickmaths.ui.login.LoginViewModel
 import pl.michalboryczko.quickmaths.ui.main.MainActivity
 import pl.michalboryczko.quickmaths.ui.main.MainViewModel
 import pl.michalboryczko.quickmaths.ui.register.RegisterActivity
@@ -39,6 +41,13 @@ internal abstract class MainModule {
     abstract fun bindRegisterViewModel(viewModel: RegisterViewModel): ViewModel
 
 
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginViewModel::class)
+    abstract fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
+
+
     @ContributesAndroidInjector
     internal abstract fun mainActivity(): MainActivity
 
@@ -48,6 +57,10 @@ internal abstract class MainModule {
 
     @ContributesAndroidInjector
     internal abstract fun registerActivity(): RegisterActivity
+
+
+    @ContributesAndroidInjector
+    internal abstract fun loginActivity(): LoginActivity
 
 
 

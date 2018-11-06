@@ -36,3 +36,24 @@ data class Resource<T>(var status: Status, var data: T? = null, var message: Str
         fun <T> error(message: String?): Resource<T> = Resource(Status.ERROR, message = message)
     }
 }
+
+data class EmptyResource(var status: Status, var message: String? = null) {
+
+    companion object {
+        /**
+         * Creates [Resource] object with `SUCCESS` status and [data].
+         */
+        fun success() = EmptyResource(Status.SUCCESS)
+
+        /**
+         * Creates [Resource] object with `LOADING` status to notify
+         * the UI to showing loading.
+         */
+        fun loading()  = EmptyResource(Status.LOADING)
+
+        /**
+         * Creates [Resource] object with `ERROR` status and [message].
+         */
+        fun error(message: String?) = EmptyResource(Status.ERROR, message = message)
+    }
+}

@@ -8,6 +8,7 @@ import pl.michalboryczko.quickmaths.model.LoginInput
 import pl.michalboryczko.quickmaths.model.User
 import pl.michalboryczko.quickmaths.model.exceptions.ApiErrorMessageException
 import pl.michalboryczko.quickmaths.model.exceptions.NoInternetAccessException
+import pl.michalboryczko.quickmaths.model.exceptions.UnknownException
 import pl.michalboryczko.quickmaths.source.api.FirebaseApiService
 import java.io.IOException
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class UserRepositoryImpl
 ): UserRepository {
     override fun logIn(input: LoginInput): Single<Boolean> {
         return firebaseApiService.logIn(input)
-                /*.compose(handleNetworkConnection())*/
+                .compose(handleExceptions())
     }
 
     override fun isUserLoggedIn(): Single<Boolean> {
@@ -55,15 +56,13 @@ class UserRepositoryImpl
     internal fun <T> handleExceptions(): SingleTransformer<T, T> = SingleTransformer {
         it.onErrorResumeNext { throwable ->
             Single.error(when (throwable) {
-                is ApiErrorMessageException -> NoInternetAccessException()
+                is UnknownException -> UnknownException("unexpected error")
                 else -> {
-                    if(checker.isInternetAvailable()){
-                        Log.d("apiLog", "internet available2")
+                    if(!checker.isInternetAvailable()){
                         NoInternetAccessException()
                     }
                     else{
-                        Log.d("apiLog", "internet not available2")
-                        NoInternetAccessException()
+                        ApiErrorMessageException(throwable.localizedMessage)
                     }
                 }
             })

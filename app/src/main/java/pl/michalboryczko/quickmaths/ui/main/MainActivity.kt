@@ -22,6 +22,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         levelThreeButton.setOnClickListener { navigator.navigateToGameActivity(this, 3) }
 
         registerButton.setOnClickListener { navigator.navigateToRegisterActivity(this)}
+        loginButton.setOnClickListener { navigator.navigateToLoginActivity(this)}
 
 
     }

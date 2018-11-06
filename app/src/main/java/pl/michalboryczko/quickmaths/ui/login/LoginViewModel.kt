@@ -2,12 +2,11 @@ package pl.michalboryczko.quickmaths.ui.login
 
 import android.arch.lifecycle.MutableLiveData
 import pl.michalboryczko.quickmaths.app.BaseViewModel
-import pl.michalboryczko.quickmaths.model.BaseCommunication
+import pl.michalboryczko.quickmaths.model.EmptyResource
 import pl.michalboryczko.quickmaths.model.LoginInput
 import pl.michalboryczko.quickmaths.model.Resource
-import pl.michalboryczko.quickmaths.model.State
-import pl.michalboryczko.quickmaths.model.login.LoginCommunication
-import pl.michalboryczko.quickmaths.source.repository.QuestionRepository
+import pl.michalboryczko.quickmaths.model.exceptions.ApiErrorMessageException
+import pl.michalboryczko.quickmaths.model.exceptions.NoInternetAccessException
 import pl.michalboryczko.quickmaths.source.repository.UserRepository
 import javax.inject.Inject
 
@@ -17,21 +16,27 @@ class LoginViewModel
 
 ) : BaseViewModel() {
 
-    val errorInformation: MutableLiveData<Resource<String>> = MutableLiveData()
+    val loginStatus: MutableLiveData<EmptyResource> = MutableLiveData()
 
     init {
 
     }
 
     fun loginClicked(loginInput: LoginInput){
-        errorInformation.value = Resource.loading()
+        loginStatus.value = EmptyResource.loading()
         repository.logIn(loginInput)
                 .subscribe(
                         {
-                            errorInformation.value = Resource.success("zalogowano pomyślnie")
+                            loginStatus.value = EmptyResource.success()
                         },
                         {
-                            errorInformation.value = Resource.error("błąd podczas logowania")
+							if(it is NoInternetAccessException)
+								loginStatus.value = EmptyResource.error("internet access error")
+
+							else if(it is ApiErrorMessageException)
+								loginStatus.value = EmptyResource.error(it.msg)
+							else
+								loginStatus.value = EmptyResource.error(it.message)
                         }
                 )
     }

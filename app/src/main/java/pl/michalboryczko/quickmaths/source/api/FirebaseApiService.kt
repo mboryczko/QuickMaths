@@ -30,7 +30,17 @@ class FirebaseApiService
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     override fun logIn(input: LoginInput): Single<Boolean> {
-        return Single.just(true)
+        return Single
+                .create { emitter ->
+                    auth.signInWithEmailAndPassword(input.email, input.password)
+                            .addOnSuccessListener{
+                                emitter.onSuccess(true)
+
+                            }
+                            .addOnFailureListener{
+                                emitter.onError(Exception("no internet"))
+                            }
+                }
     }
 
     override fun isUserLoggedIn(): Single<Boolean> {
