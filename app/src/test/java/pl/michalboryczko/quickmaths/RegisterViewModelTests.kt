@@ -49,22 +49,34 @@ class RegisterViewModelTests: BaseTest() {
 
     @Test
     fun registerValidationsTest(){
-
         assertTrue(viewmodel.validateUser(generateValidUser()))
-        /*assertNull( (viewmodel.errorInformation.value as RegisterError).emailError)
-        assertNull( (viewmodel.errorInformation.value as RegisterError).passwordError)
-        assertNull( (viewmodel.errorInformation.value as RegisterError).usernameError)*/
     }
 
     @Test
-    fun registerValidationsUserEmptyFieldTest(){
-        viewmodel.validateUser(User("", "", ""))
+    fun wrongEmailTest(){
+        val result = viewmodel.validateUser(User("", random.generateStrongPassword(), random.generateRandomString(8)))
+        assertFalse(result)
         assertNotNull( (viewmodel.errorInformation.value as RegisterError).emailError)
+    }
 
-        viewmodel.validateUser(User(random.generateRandomString(), "", ""))
+    @Test
+    fun wrongEmailTest2(){
+        val result = viewmodel.validateUser(User(random.generateRandomString(), random.generateStrongPassword(), random.generateRandomString(8)))
+        assertFalse(result)
         assertNotNull( (viewmodel.errorInformation.value as RegisterError).emailError)
+    }
 
-        viewmodel.validateUser(User("", random.generateStrongPassword(), ""))
+    @Test
+    fun wrongUsernameTest(){
+        val result = viewmodel.validateUser(User(random.generateRandomEmail(), random.generateStrongPassword(), ""))
+        assertFalse(result)
+        assertNotNull( (viewmodel.errorInformation.value as RegisterError).usernameError)
+    }
+
+    @Test
+    fun wrongPasswordTest(){
+        val result = viewmodel.validateUser(User(random.generateRandomEmail(), random.generateRandomString(2), random.generateRandomString(8)))
+        assertFalse(result)
         assertNotNull( (viewmodel.errorInformation.value as RegisterError).passwordError)
     }
 

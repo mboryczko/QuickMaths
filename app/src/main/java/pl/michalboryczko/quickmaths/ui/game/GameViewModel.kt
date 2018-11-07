@@ -35,7 +35,7 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
     }
 
     fun initViewModel(level: Int){
-        this.exerciseProvider = ExerciseProvider(level)
+        this.exerciseProvider = ExerciseProvider(level, 561264818741412412L)
     }
 
     fun nextClicked(){
@@ -78,35 +78,39 @@ class GameViewModel @Inject constructor(private val timerUseCase: TimerUseCase) 
     }
 
     fun startTimer(){
-        timerUseCase
-                .observable(TimerInput(0, 3, 0, 1, TimeUnit.SECONDS))
-                .subscribe(
-                        {t ->
-                            timerInfo.value = "Test starts in: "
-                            timerValue.value = t.toString()
-                            Timber.d("received: $t")
-                            },
-                        {e ->  provideError(e.message)},
-                        { startGameTimer() }
-                )
+        disposables.add(
+                timerUseCase
+                        .observable(TimerInput(0, 3, 0, 1, TimeUnit.SECONDS))
+                        .subscribe(
+                                {t ->
+                                    timerInfo.value = "Test starts in: "
+                                    timerValue.value = t.toString()
+                                    Timber.d("received: $t")
+                                },
+                                {e ->  provideError(e.message)},
+                                { startGameTimer() }
+                        )
+        )
     }
 
     private fun startGameTimer(){
         getNextEquation()
 
-        timerUseCase
-                .observable( TimerInput(0, 0, 30, 1, TimeUnit.SECONDS))
-                .subscribe(
-                        {t ->
-                            timerInfo.value = "Time left "
-                            timerValue.value = t.toString()
-                        },
-                        {e ->  provideError(e.message)},
-                        {
-                            timerInfo.value = "End of time"
-                            timerValue.value = ""
-                        }
-                )
+        disposables.add(
+                timerUseCase
+                        .observable( TimerInput(0, 0, 30, 1, TimeUnit.SECONDS))
+                        .subscribe(
+                                {t ->
+                                    timerInfo.value = "Time left "
+                                    timerValue.value = t.toString()
+                                },
+                                {e ->  provideError(e.message)},
+                                {
+                                    timerInfo.value = "End of time"
+                                    timerValue.value = ""
+                                }
+                        )
+        )
     }
 
 

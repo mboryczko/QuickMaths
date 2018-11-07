@@ -22,19 +22,28 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
+
+        viewModel.internetConnection.observe(this, Observer {
+            it?.let {
+                internetTextView.visibility = if(!it) View.VISIBLE else View.GONE
+            }
+        })
+
         viewModel.loginStatus.observe(this, Observer{
             it?.let {
                 when(it.status){
                     Status.LOADING -> {
-						showToastMessage("loading")
+                        progressBar.visibility = View.VISIBLE
                     }
 
                     Status.SUCCESS -> {
-
+                        progressBar.visibility = View.GONE
 						showToastMessage("success")
                     }
 
                     Status.ERROR -> {
+                        progressBar.visibility = View.GONE
                         it.message?.let {
                             val message = resources.getString(it)
                             showToastMessage(message)

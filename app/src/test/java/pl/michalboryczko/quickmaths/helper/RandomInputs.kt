@@ -31,8 +31,13 @@ class RandomInputs {
     fun generateRandomString(length: Int): String = ('a' .. 'z').randomString(length)
 
     fun generateRandomString(min: Int = 3, max: Int = 10): String{
-        val length = r.nextInt(max + min) - min
+        val length = r.nextInt(max + min) + min
         return ('a' .. 'z').randomString(length)
+    }
+
+    fun generateRandomLong(): Long{
+        val value = r.nextLong() + r.nextLong() + r.nextInt(99999999)
+        return if(value < 0) return -value else value
     }
 
 

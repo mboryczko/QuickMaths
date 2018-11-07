@@ -11,46 +11,55 @@ data class ExerciseInput(
 
 class ExerciseProvider(
         private val level: Int,
+        private val serverSeed: Long,
         private val template: String = "X Y Z= ?"
 ) {
 
     private val currentBounds: IntRange
-    private val levelOneBounds = 0 .. 20
-    private val levelTwoBounds = 0 .. 100
-    private val levelThreeBounds= 0 .. 1000
-
+    private val levelOneBounds = 1 .. 20
+    private val levelTwoBounds = 1 .. 100
+    private val levelThreeBounds= 1 .. 1000
     private val probabilityOfAddition = 45
     private val probabilityOfSubtraction = 35
+    private val firstRange = 1..probabilityOfAddition
+    private val secondRange = probabilityOfAddition .. probabilityOfAddition + probabilityOfSubtraction
 
+
+    private var equtionNr: Int = 1
+    private var seed: Long
 
     init {
         if(level == 1) currentBounds = levelOneBounds
         else if(level == 2) currentBounds = levelTwoBounds
         else currentBounds = levelThreeBounds
+        seed = serverSeed
     }
 
-    private fun IntRange.getRandomNr(): Int{
-        val r = Random()
-        return r.nextInt(this.first + this.last) + this.first
+    private fun IntRange.getNumber(): Int{
+        /*val r = Random()*/
+        System.out.println("seed: $seed first: $first last: $last")
+        return ((seed % (last - first)) + first).toInt()
+        /*
+        return r.nextInt(this.first + this.last) + this.first*/
     }
 
-    fun getSubtractionWithPositiveResult(): Exercise{
-        val first = currentBounds.getRandomNr()
-        val second = (0..first).getRandomNr()
+    private fun getSubtractionWithPositiveResult(): Exercise{
+        val first = currentBounds.getNumber()
+        val second = (1..first+1).getNumber()
 
-        return createExercise(ExerciseInput("-", currentBounds, (0..first)))
+        return createExercise(ExerciseInput("-", currentBounds, (1..first+1)))
     }
 
-    fun getAdditionExercise(): Exercise = createExercise(ExerciseInput("+", currentBounds, currentBounds))
-    fun getMultiplicationExercise(): Exercise{
-        val multiplicationBounds = (0 .. currentBounds.last/5)
+    private fun getAdditionExercise(): Exercise = createExercise(ExerciseInput("+", currentBounds, currentBounds))
+    private fun getMultiplicationExercise(): Exercise{
+        val multiplicationBounds = (1 .. currentBounds.last/5)
         return createExercise(ExerciseInput("·", currentBounds, multiplicationBounds))
     }
 
 
-    fun createExercise(obj: ExerciseInput): Exercise{
-        val first = obj.firstRange.getRandomNr()
-        val second = obj.secondRange.getRandomNr()
+    private fun createExercise(obj: ExerciseInput): Exercise{
+        val first = obj.firstRange.getNumber()
+        val second = obj.secondRange.getNumber()
 
         val equation =
                 template.replace("X", first.toString(), true)
@@ -62,14 +71,16 @@ class ExerciseProvider(
 
 
     fun getEquation(): Exercise{
-        val draw = Random().nextInt(100)
-        val firstRange = 0..probabilityOfAddition
-        val secondRange = probabilityOfAddition .. probabilityOfAddition + probabilityOfSubtraction
+        val draw = seed % 100
+        seed -= 28 * equtionNr++
 
-        when( draw ){
-            in firstRange -> return getSubtractionWithPositiveResult()
-            in secondRange -> return getAdditionExercise()
-            else -> return getMultiplicationExercise()
+        /*System.out.println("DRAW!!!!!!!! $draw")
+        System.out.println("SEED!!!!!!!! $seed")*/
+
+        return when( draw ){
+            in firstRange -> getSubtractionWithPositiveResult()
+            in secondRange -> getAdditionExercise()
+            else -> getMultiplicationExercise()
         }
     }
 

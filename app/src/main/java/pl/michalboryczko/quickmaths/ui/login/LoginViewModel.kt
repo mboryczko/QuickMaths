@@ -19,7 +19,7 @@ class LoginViewModel
 ) : BaseViewModel() {
 
     val loginStatus: MutableLiveData<EmptyResource> = MutableLiveData()
-    private val internetConnection: MutableLiveData<Boolean> = MutableLiveData()
+    val internetConnection: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         disposables.add(
@@ -33,7 +33,6 @@ class LoginViewModel
         loginStatus.value = EmptyResource.loading()
         if(validateLoginInput(loginInput))
             loginUser(loginInput)
-
     }
 
     private fun loginUser(loginInput: LoginInput){
