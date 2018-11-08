@@ -9,6 +9,8 @@ import dagger.multibindings.IntoMap
 import io.reactivex.schedulers.Schedulers
 import pl.michalboryczko.quickmaths.di.ViewModelKey
 import pl.michalboryczko.quickmaths.interactor.TimerUseCase
+import pl.michalboryczko.quickmaths.ui.find.FindFriendActivity
+import pl.michalboryczko.quickmaths.ui.find.FindFriendViewModel
 import pl.michalboryczko.quickmaths.ui.game.GameActivity
 import pl.michalboryczko.quickmaths.ui.game.GameViewModel
 import pl.michalboryczko.quickmaths.ui.login.LoginActivity
@@ -48,6 +50,12 @@ internal abstract class MainModule {
     abstract fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
 
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(FindFriendViewModel::class)
+    abstract fun bindFindFriendsViewModel(viewModel: FindFriendViewModel): ViewModel
+
+
     @ContributesAndroidInjector
     internal abstract fun mainActivity(): MainActivity
 
@@ -61,6 +69,9 @@ internal abstract class MainModule {
 
     @ContributesAndroidInjector
     internal abstract fun loginActivity(): LoginActivity
+
+    @ContributesAndroidInjector
+    internal abstract fun findFriendsActivity(): FindFriendActivity
 
 
 

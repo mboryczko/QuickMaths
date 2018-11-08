@@ -23,6 +23,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
         registerButton.setOnClickListener { navigator.navigateToRegisterActivity(this)}
         loginButton.setOnClickListener { navigator.navigateToLoginActivity(this)}
+        findFriendButton.setOnClickListener { navigator.navigateToFindFriendsActivity(this)}
 
 
     }

@@ -26,4 +26,9 @@
     <string name="password_empty">Password should not be empty</string>
 
 
+    <!--find friend -->
+    <string name="friend_email">Friend e-mail address</string>
+    <string name="friend_search_button">Search friend</string>
+
+
 </resources>

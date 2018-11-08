@@ -22,13 +22,13 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
-
         viewModel.internetConnection.observe(this, Observer {
             it?.let {
                 internetTextView.visibility = if(!it) View.VISIBLE else View.GONE
             }
         })
+
+        progressBar.visibility = View.GONE
 
         viewModel.loginStatus.observe(this, Observer{
             it?.let {

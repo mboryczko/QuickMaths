@@ -2,20 +2,16 @@ package pl.michalboryczko.quickmaths.source.api
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.*
-import pl.michalboryczko.quickmaths.interactor.InternetConnectivityChecker
-import pl.michalboryczko.quickmaths.model.Exercise
 import pl.michalboryczko.quickmaths.model.User
 import javax.inject.Inject
 import javax.inject.Singleton
 import pl.michalboryczko.quickmaths.model.LoginInput
-import pl.michalboryczko.quickmaths.model.exceptions.ApiErrorException
-import pl.michalboryczko.quickmaths.model.exceptions.ApiErrorMessageException
-import pl.michalboryczko.quickmaths.model.exceptions.NoInternetAccessException
-import pl.michalboryczko.quickmaths.model.exceptions.UnauthorizedException
 import pl.michalboryczko.quickmaths.source.repository.UserRepository
-import retrofit2.Response
 import java.lang.Exception
+
+
 
 
 /**
@@ -26,8 +22,11 @@ import java.lang.Exception
 class FirebaseApiService
 @Inject constructor() : UserRepository {
 
+    init {
+    }
 
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
     override fun logIn(input: LoginInput): Single<Boolean> {
         return Single
@@ -53,16 +52,48 @@ class FirebaseApiService
                 .create { emitter ->
                 auth.createUserWithEmailAndPassword(user.email, user.password)
                         .addOnSuccessListener{
-
                             Log.d("apiLog", "onsuccess ")
                             emitter.onSuccess(true)
 
                         }
                         .addOnFailureListener{
                             Log.d("apiLog", "onfailure listener message: ${it.localizedMessage}")
-                            emitter.onError(Exception("no internet"))
+                            emitter.onError(it)
                         }
             }
     }
 
+    override fun findFriendByEmail(email: String): Single<User> {
+        val dbRef = db.collection("users");
+        return Single
+                .create { emitter ->
+                    dbRef
+                            .whereEqualTo("email", email)
+                            .get()
+                            .addOnCompleteListener{ task ->
+                                if (task.isSuccessful) {
+                                    val document = task.result
+                                    document?.let {
+                                        val foundUsers = it.toObjects(User::class.java)
+                                        if(foundUsers.isNotEmpty())
+                                            emitter.onSuccess(foundUsers.first())
+                                        else
+                                            emitter.onError(NoSuchElementException())
+                                    }
+                                } else {
+                                    emitter.onError(Exception("no friend found"))
+                                }
+                            }
+                }
+    }
+
+    fun saveUserToDatabase(user: User): Single<Boolean> {
+        return Single
+                .create { emitter ->
+                    db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener { emitter.onSuccess(true) }
+                            .addOnFailureListener{ emitter.onError(it)}
+                }
+    }
 }

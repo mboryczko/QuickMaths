@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_register.*
 import pl.michalboryczko.quickmaths.R
 import pl.michalboryczko.quickmaths.app.BaseActivity

@@ -30,13 +30,18 @@ class UserRepositoryImpl
     }
 
     override fun createUser(user: User): Single<Boolean> {
-
         Log.d("apiLog", "create use called")
         return firebaseApiService.createUser(user)
+                .flatMap { firebaseApiService.saveUserToDatabase(user) }
                 .compose(handleNetworkConnection())
                 .compose(handleExceptions())
     }
 
+    override fun findFriendByEmail(email: String): Single<User> {
+        return firebaseApiService.findFriendByEmail(email)
+                .compose(handleNetworkConnection())
+                .compose(handleExceptions())
+    }
 
     private fun <T> handleNetworkConnection(): SingleTransformer<T, T> = SingleTransformer {
 

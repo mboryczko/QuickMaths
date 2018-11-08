@@ -8,4 +8,5 @@ interface UserRepository {
     fun logIn(input: LoginInput): Single<Boolean>
     fun isUserLoggedIn(): Single<Boolean>
     fun createUser(user: User): Single<Boolean>
+    fun findFriendByEmail(email: String): Single<User>
 }
